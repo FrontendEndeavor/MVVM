@@ -1,5 +1,5 @@
 // Model - данные и бизнес-логика
-const model = {
+export const model = {
 	products: [
 		{
 			id: 0,
