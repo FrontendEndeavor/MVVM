@@ -6,9 +6,7 @@ export const viewModel = {
 	subscribe(fn) {
 		this.listeners.push(fn);
 	},
-	notify() {
-		this.listeners.forEach(fn => fn());
-	},
+
 	addToCart(id) {
 		const product = model.products.find(p => p.id === id);
 		const isInCart = model.cart.items.find(p => p.id === id);
@@ -22,12 +20,12 @@ export const viewModel = {
 			isInCart.quantity++;
 		}
 
-		this.notify();
+		this.notify({ type: 'cart-updated', productId: id });
 	},
 
 	removeFromCart(id) {
 		model.cart.items = model.cart.items.filter(p => p.id !== id);
-		this.notify();
+		this.notify({ type: 'cart-updated', productId: id });
 	},
 
 	getTotal() {
@@ -40,14 +38,18 @@ export const viewModel = {
 
 	updateQuantity(id, quantity) {
 		const item = model.cart.items.find(p => p.id === id);
-		
+
 		if (!item) return;
-		
+
 		item.quantity = quantity;
 		if (quantity <= 0) {
 			this.removeFromCart(id);
 		} else {
-			this.notify();
+			this.notify({ type: 'cart-updated', productId: id });
 		}
-	}
+	},
+
+	notify(event) {
+		this.listeners.forEach(fn => fn(event));
+	},
 };
