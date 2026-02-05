@@ -37,4 +37,17 @@ export const viewModel = {
 	getTotalCount() {
 		return model.cart.items.reduce((acc, p) => acc + p.quantity, 0);
 	},
+
+	updateQuantity(id, quantity) {
+		const item = model.cart.items.find(p => p.id === id);
+		
+		if (!item) return;
+		
+		item.quantity = quantity;
+		if (quantity <= 0) {
+			this.removeFromCart(id);
+		} else {
+			this.notify();
+		}
+	}
 };

@@ -26,15 +26,45 @@ function renderCart() {
 
 	// Добавляем товары в список
 	model.cart.items.forEach(product => {
-		const cartItem = document.createElement('li');
-		cartItem.textContent = `${product.name} - ${product.price} руб. x ${product.quantity}`;
-		cartItem.addEventListener('click', () => viewModel.removeFromCart(product.id));
+		const cartItem = createCartItem(product);
 		cartList.appendChild(cartItem);
 	});
 
 	// Рассчитываем и отображаем итоговую сумму
 	const total = viewModel.getTotal();
 	totalPrice.textContent = total;
+}
+
+function createCartItem(product) {
+	const cartItem = document.createElement('li');
+
+	const info = document.createElement('span');
+	info.textContent = `${product.name} - ${product.price} руб. x ${product.quantity}`;
+	cartItem.appendChild(info);
+
+	const input = createCartItemInput(product);
+	cartItem.appendChild(input);
+
+	const deleteButton = createCartItemDeleteButton(product);
+	cartItem.appendChild(deleteButton);
+
+	return cartItem;
+}
+
+function createCartItemInput(product) {
+	const input = document.createElement('input');
+	input.type = 'number';
+	input.value = product.quantity;
+	input.min = 0;
+	input.addEventListener('change', () => viewModel.updateQuantity(product.id, Number(input.value)));
+	return input;
+}
+
+function createCartItemDeleteButton(product) {
+	const button = document.createElement('button');
+	button.textContent = 'Удалить';
+	button.addEventListener('click', () => viewModel.removeFromCart(product.id));
+	return button;
 }
 
 function render() {
