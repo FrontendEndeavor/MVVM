@@ -24,4 +24,17 @@ export const viewModel = {
 
 		this.notify();
 	},
+
+	removeFromCart(id) {
+		model.cart.items = model.cart.items.filter(p => p.id !== id);
+		this.notify();
+	},
+
+	getTotal() {
+		return model.cart.items.reduce((acc, p) => acc + p.price * p.quantity, 0);
+	},
+
+	getTotalCount() {
+		return model.cart.items.reduce((acc, p) => acc + p.quantity, 0);
+	},
 };
