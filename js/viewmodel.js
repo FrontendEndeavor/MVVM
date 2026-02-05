@@ -1,4 +1,4 @@
-import { model } from './model';
+import { model } from './model.js';
 
 // ViewModel - связующее звено между Model и View
 export const viewModel = {
